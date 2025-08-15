@@ -106,7 +106,6 @@ const showMessage = (type, message, duration = 3000) => {
 
 // 更新应用配置
 const updateConfig = (newConfig) => {
-  Object.assign(appConfig, newConfig);
   if (appConfig.appId !== newConfig.appId) {
     if (newConfig.appId && newConfig.appId === CONFIG.DEFAULT_APP_ID) {
       setAppId(CONFIG.DEFAULT_APP_ID);
@@ -116,6 +115,7 @@ const updateConfig = (newConfig) => {
       setServerSecret(newConfig.serverSecret);
     }
   }
+  Object.assign(appConfig, newConfig);
 };
 
 // 更新表单数据
