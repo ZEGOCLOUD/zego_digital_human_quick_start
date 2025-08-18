@@ -61,7 +61,7 @@ const appConfig = reactive({
   // 音色缓存 - 按数字人ID缓存音色数据
   timbreCache: {},
   // 音色类型：true为公共音色，false为私有音色
-  usePublicTimbres: false
+  usePublicTimbres: true
 });
 
 // 任务状态
@@ -116,6 +116,8 @@ const updateConfig = (newConfig) => {
     }
   }
   Object.assign(appConfig, newConfig);
+
+  if (typeof appConfig.selectedDigitalHuman === 'boolean') appConfig.usePublicTimbres = appConfig.selectedDigitalHuman?.IsPublic;
 };
 
 // 更新表单数据

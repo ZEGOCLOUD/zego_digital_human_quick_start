@@ -44,7 +44,7 @@ const actionForm = reactive({ action: '' });
 
 // 音色类型切换 - 与父组件同步
 const usePublicTimbres = computed({
-  get: () => props.appConfig.usePublicTimbres || false,
+  get: () => props.appConfig.usePublicTimbres,
   set: (value) => {
     emit('timbre-type-change', value);
   }
@@ -75,7 +75,6 @@ const roomStreamUpdateRegistered = ref(false);
 const canCreateTask = computed(() => {
   return (
     props.appConfig.selectedDigitalHuman &&
-    props.appConfig.selectedTimbre &&
     !props.taskState.currentTaskId &&
     !loading.createTask
   );
@@ -175,10 +174,8 @@ const handleCreateTask = async () => {
     const config = {
       DigitalHumanConfig: {
         DigitalHumanId: props.appConfig.selectedDigitalHuman.DigitalHumanId,
-        TimbreId: props.appConfig.selectedTimbre?.TimbreId,
         BackgroundColor: "#00000000",
         Layout: props.appConfig.layoutConfig.digitalHuman,
-        InferenceMode: 1,
       },
       TTL: 3600,
       RTCConfig: {
