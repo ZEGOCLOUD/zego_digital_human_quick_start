@@ -108,11 +108,14 @@ const showMessage = (type, message, duration = 3000) => {
 const updateConfig = (newConfig) => {
   if (appConfig.appId !== newConfig.appId) {
     if (newConfig.appId && newConfig.appId === CONFIG.DEFAULT_APP_ID) {
-      setAppId(CONFIG.DEFAULT_APP_ID);
+      setAppId(CONFIG.DEFAULT_APP_ID || '');
       setServerSecret("");
     } else {
-      setAppId(newConfig.appId);
-      setServerSecret(newConfig.serverSecret);
+      if (!newConfig.appId || !newConfig.serverSecret) {
+        console.warn("AppID或ServerSecret为空，将设置为默认体验账号");
+      }
+      setAppId(newConfig.appId || '');
+      setServerSecret(newConfig.serverSecret || '');
     }
   }
   Object.assign(appConfig, newConfig);

@@ -1,16 +1,16 @@
 import { CONFIG } from "../config";
 
-let appId = CONFIG.DEFAULT_APP_ID;
+let appId = CONFIG.DEFAULT_APP_ID || "";
 let serverSecret = "";
 
-export const setAppId = (newAppId) => {
+export const setAppId = (newAppId = "") => {
   console.log("setAppId", newAppId);
-  appId = newAppId;
+  appId = newAppId || CONFIG.DEFAULT_APP_ID;
 }
 
-export const setServerSecret = (newServerSecret) => {
+export const setServerSecret = (newServerSecret = "") => {
   console.log("setServerSecret", newServerSecret);
-  serverSecret = newServerSecret;
+  serverSecret = newServerSecret || "";
 }
 
 const apiRequest = async (path, data = {}, method = "POST", params = {}) => {
@@ -20,8 +20,8 @@ const apiRequest = async (path, data = {}, method = "POST", params = {}) => {
       method,
       headers: {
         "Content-Type": "application/json",
-        "X-App-Id": appId,
-        "X-Server-Secret": serverSecret,
+        "X-App-Id": appId || "",
+        "X-Server-Secret": serverSecret || "",
       },
       body: method === "POST" ? JSON.stringify(data) : null,
     });
