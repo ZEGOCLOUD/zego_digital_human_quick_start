@@ -218,7 +218,7 @@ const handleCreateTask = async () => {
     // 创建任务失败时也重置动作驱动状态
     resetActionDriveState();
 
-    props.showMessage("error", `创建失败: ${error.message}`);
+    props.showMessage("error", `创建失败: ${error.msg || error.message}`);
   } finally {
     loading.createTask = false;
   }
@@ -234,6 +234,7 @@ const handleStopTask = async () => {
       stopRTCPublishTask();
     }
     zg.logoutRoom();
+    console.log('logoutRoom success')
     isRoomLogined.value = false;
     await streamAPI.stopStreamTask(
       props.taskState.currentTaskId
@@ -465,6 +466,11 @@ const switchTab = (tab) => {
 const handleDestroyAllTasks = async () => {
   loading.stopTask = true;
   try {
+    // 先停止推流和销毁流
+    if (isPublishing.value && publishStreamId) {
+      stopRTCPublishTask();
+    }
+    zg.logoutRoom();
     const res = await streamAPI.queryStreamTasks();
     console.log("queryStreamTasks 返回：", res);
     const data = res?.Data;
@@ -499,6 +505,9 @@ const handleDestroyAllTasks = async () => {
       isStreaming: false,
       driveList: [],
     });
+
+    // 重置动作驱动状态
+    resetActionDriveState();
     props.showMessage("success", "已销毁全部 room_ 任务");
   } catch (err) {
     props.showMessage("error", `销毁全部任务失败: ${err.message}`);
